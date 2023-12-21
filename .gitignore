@@ -1,0 +1,6 @@
+/tmp/
+
+#R Contains the user specific ssh public key
+#R/cloud-init.yaml
+
+/.rust-is-up*
