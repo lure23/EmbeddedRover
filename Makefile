@@ -3,6 +3,7 @@
 #
 # Requires:
 #	- multipass
+#	- 10 GB disk space
 #
 
 # TODO:
@@ -86,12 +87,12 @@ $(_BEAN): #_mp-image
 _mp-image: _mp-exists
 	@(multipass list | grep $(_MP_INSTANCE) > /dev/null) || ( \
       multipass launch lts --name $(_MP_INSTANCE) --mount $(shell pwd):/home/ubuntu/$(_MP_SUBFOLDER) $(_MP_PARAMS) && \
-      multipass exec $(_MP_INSTANCE) -- sudo apt-get update \
+      multipass exec $(_MP_INSTANCE) -- sudo apt-get update && \
+      multipass exec $(_MP_INSTANCE) -- sudo apt-get install build-essential \
 	)
 
 	@# Note: You may add 'sudo apt-get upgrade' if you wish. Without it, we simply use the latest LTS as-is.
     # multipass exec $(_MP_INSTANCE) -- sudo apt-get upgrade && \
-    # multipass exec $(_MP_INSTANCE) -- sudo apt-get install unzip && \
 
 _mp-exists:
 	@multipass --version >/dev/null

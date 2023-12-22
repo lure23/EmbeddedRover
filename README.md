@@ -3,7 +3,7 @@
 Platform for starting embedded Rust development, with:
 
 - <font color=green>&check;</font> sandboxing
-- <font color=red>TBD</font> IDE setup (optional)
+- <font color=green>&check;</font> IDE setup (optional)
 - <font color=red>TBD</font> flashing to an embedded board
 
 ## Requirements
@@ -81,23 +81,23 @@ The private key is stored in:
 <!-- TBD. Windows + WSL
 -->
 
-The key is appropriately accessible for super-user only. We copy it "somewhere" and change the access rights so that the Rust Rover desktop application can read it.
+The key is appropriately accessible for super-user only. We copy it somewhere where the Rust Rover desktop application can access it (e.g. the project folder itself) and change the access rights suitably.
+
+>Note: Cannot place it in `~/.ssh`. The desktop app cannot access contents of that folder (can it?).
+
+<p />
 
 >Note: There are other ways of arranging the ssh connection between the parties. See the links under References if you are not at ease with this.
 >
 >Exposing the private key to user side is not a grade security issue. It's only used to access a child environment, and that environment can be accessed (by `multipass shell`) from our command line, anyways.
 
 ```
-$ pushd ~/.ssh
-
-$ sudo cp "/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa" multipassd
-$ sudo chown multipassd {your-username}
-$ sudo chmod a+r multipassd
-
-$ popd
+$ sudo cp "/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa" multipassd.key
+$ sudo chown multipassd.key {your-username}
+$ sudo chmod a+r multipassd.key
 ```
 
->Note the quotes needed because of a space in the path.
+>Note the quotes needed because there's a space in the path.
 
 **Remote Development setup**
 
@@ -127,13 +127,13 @@ $ popd
    Enter the `Project directory` as in the image - it's the path, where the project files are mapped, within Multipass.
 
    Press `Download IDE and Connect`.
-   
----   
->‼️ The steps above are not successful. Something "internal" goes wrong, and actual Remote Development cannot be started.
->
->Rust Rover 2023.3 EAP (233.11799.306)
 
----
+
+   The outcome of all this should be that you see the project opened, as a remote development session:
+   
+   ![](.images/opened-remotely.png)
+   
+   
 
 <!-- 
 tbd. Finish actual steps to:

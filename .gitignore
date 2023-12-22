@@ -1,6 +1,11 @@
-/tmp/
-
-#R Contains the user specific ssh public key
-#R/cloud-init.yaml
-
+# Makefile token
 /.rust-is-up*
+
+/multipassd.key
+
+# In your own project, encouraged to let Cargo.lock in the version control. Here ignored, because of just sample.
+/Cargo.lock
+
+# Rust itself
+/target/
+
