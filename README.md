@@ -148,7 +148,34 @@ The build should start and show up in the console.
 
 >Note that this happens in the remote instance.
 
+Then ... not sure what caused this to occur, but eventually in the top menu bar there is:
 
+![](.images/run-menu.png)
+
+>TBD. Do the icons show up automatically?
+
+This means we can run and debug the remote instance. YAY!!!
+
+Push `Run`.
+
+![](.images/run-success.png)
+
+Make a breakpoint on line 2 (click it) and press `Debug`.
+
+![](.images/set-breakpoint.png)
+
+![](.images/debug-at-breakpoint.png)
+
+If we had variables, you would see their values here. Press `Resume Program` to let it run its way. 
+
+This concludes our setup!
+
+You now have a working, sandboxed environment for Rust development.
+
+
+
+
+<!-- DISABLED; may not have been needed?
 Next, we need to create a configuration so that the debugging features of the IDE can be utilized.
 
 1. Click `Current File` > `Edit Configurations...`
@@ -209,7 +236,6 @@ Next, we need to create a configuration so that the debugging features of the ID
 	Notice that there's a new `Run` target. Click it!
 
 ---
-
 ‼️	Here, EAP seems to get stuck for a while (> 1 min?) and then fails.
 
 ![](.images/run-stuck!.png)
@@ -220,17 +246,39 @@ Next, we need to create a configuration so that the debugging features of the ID
 
 The `Debug` feature doesn't seem to be implemented, at this moment (2023.3.1 EAP).
 
+-->
+
+
+<!-- DISABLED since we got Debug to work
+## You leave me here??
+
+Yes. :)
+
+Though the IDE features seem to be still in flux, you can *absolutely* do development using the Rust Rover + EAP + Multipass toolchain.
+
+![](.images/terminal-run.png)
+
+Press the terminal icon (highlighted in the screen shot) and you can do the normal `cargo run`, `cargo build` etc. in the remote instance.
+
+What you'll get in addition is:
+-->
+
 
 ## Next 
 
-As of now (Dec-23), the Rust Rover + EAP setup doesn't feel comfortable for actual development work. Of course, we're talking of a Preview product here. This repo can work as a testbed for supporting them in their development.
+We can each go our ways, now. Use the `Makefile` in this repo as a basis for your Rust endeavours, if you like. Consider it Public Domain.
 
-Hopefully, by summer of 2024, we have:
+The author has an ESP32 board in mail, for being the target of his Rust adventures. There may be additions to this repo (thus its name, "Embedded Rover").
 
-- easy setup of Rust Remote Development
-- remote Run and Debug features
+What's naturally welcome are:
 
-That's all for now!  Happy to take in contributors / fellow maintainers for the repo! 🌼
+- any corrections; either in Discussions, Issues or PRs. Thanks!!!
+- additional material on setting up the same on Windows + WSL2 developer account (or Linux)
+
+   >Note! Multipass requires a Windows Pro license, in order to use Hyper-X virtualization. Otherwise you'll need to install VirtualBox. 🥴
+
+
+That's all for now! 🌼
 
 
 ## References
