@@ -99,7 +99,7 @@ $ sudo chmod a+r multipassd.key
 
 >Note the quotes needed because there's a space in the path.
 
-**Remote Development setup**
+**Connecting to Remote client**
 
 1. Open Rust Rover application
 2. `File` > `Remote Development...`
@@ -133,13 +133,104 @@ $ sudo chmod a+r multipassd.key
    
    ![](.images/opened-remotely.png)
    
-   
 
-<!-- 
-tbd. Finish actual steps to:
-- debugging in Rust Rover (use the src/main.rs)
-- building etc.
--->
+**Build and Debug!!**
+
+You should now be able to build the sample program (`src/main.rs`)..
+
+![](.images/hammer.png)
+
+Click the hammer icon on the toolbar.
+
+The build should start and show up in the console. 
+
+![](.images/build-result.png)
+
+>Note that this happens in the remote instance.
+
+
+Next, we need to create a configuration so that the debugging features of the IDE can be utilized.
+
+1. Click `Current File` > `Edit Configurations...`
+
+   ![](.images/edit-configs.png)
+
+	.. `+` > `Cargo`
+	
+	>If you've used any JetBrains IDEs before, this should look familiar. It's where compile/debug/test time properties are declared. You can define multiple such configurations, if you have the need.
+	
+   Switch `Run on:` to `SSH`
+   
+   ![](.images/run-on-ssh.png)
+
+   ..and provide the host and username values
+   
+   ![](.images/target-1.png)
+
+	>Note: The author doesn't know why JetBrains EAP wouldn't use the values we've already provided. 
+	>If you don't remember the IP, you can run `make prep` again. It doesn't harm.
+
+	Note that this is display `1/4` of the target wizard. Let's see what's coming - press `Next`.
+	
+   ![](.images/target-2a.png)
+
+	We've seen that! Press `OK`.
+	
+	>⚠️ The reason we get the same request again must be due to still suboptimal integration between the Rust Rover (where we've OK'ed this) and the EAP client (who's now asking). Rust Rover is still in PREVIEW mode; hopefully this section of target creation gets ironed out before actual release!
+
+   ![](.images/target-2.png)
+
+	>The "private key" asked here *should* be from our local (desktop) account, right?  But the dialog presents the file system of the remote instance... That's strange.
+	>
+	>We happen to share the key on that side, too, so let's pick it.
+	>
+	>Ideally, NONE OF THIS SHOULD BE SEEN since we've already touched base with the remote client.
+
+	><font color=red>JetBrains BUG??</font> Should the dialog show local files - but then again, please cut this whole wizard out? 🙂
+
+	![](.images/target-3.png)
+	
+	Press `Next`.
+	
+	![](.images/target-4.png)
+
+	Here, no changes are needed.
+	
+	>Note: If you click the "configure existing..." and check `rsync` connection, it seems to be there just fine.
+	>
+	><font color=orange>JetBrains: Can you remove the warning text if `rsync` connection is available?</font> - or am I doing something wrong..
+
+	![](.images/target-created.png)
+	
+	We now have a Rust compilation/debug/testing target that's remote. Press `OK`.
+	
+	![](.images/target-is-there.png)
+	
+	Notice that there's a new `Run` target. Click it!
+
+---
+
+‼️	Here, EAP seems to get stuck for a while (> 1 min?) and then fails.
+
+![](.images/run-stuck!.png)
+
+☐ <font color=red>JetBrains BUG</font> or an issue with my setup=?
+
+---
+
+The `Debug` feature doesn't seem to be implemented, at this moment (2023.3.1 EAP).
+
+
+## Next 
+
+As of now (Dec-23), the Rust Rover + EAP setup doesn't feel comfortable for actual development work. Of course, we're talking of a Preview product here. This repo can work as a testbed for supporting them in their development.
+
+Hopefully, by summer of 2024, we have:
+
+- easy setup of Rust Remote Development
+- remote Run and Debug features
+
+That's all for now!  Happy to take in contributors / fellow maintainers for the repo! 🌼
 
 
 ## References
