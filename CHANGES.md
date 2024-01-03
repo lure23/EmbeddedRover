@@ -1,5 +1,9 @@
 # Changes
 
+## 1-Jan-24
+
+- Moved Multipass specific files, e.g. `Makefile` to `.mp/`
+
 ## 22-Dec-23
 
 Remote setup covered

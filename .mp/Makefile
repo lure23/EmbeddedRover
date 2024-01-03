@@ -5,23 +5,19 @@
 #	- multipass
 #	- 10 GB disk space
 #
-
-# TODO:
-#	- Why doesn't '.cargo/env' get automatically run, by -say- 'make test' (any 'multipass exec')?
-#	  It does get run in 'multipass shell'.
+# Usage:
+#	- launched from the work directory (which is the current one)
 #
-#	  A: This may be due to use of 'sh -c' (instead of bash?). Likely Ubuntu doesn't make such read the setup files,
-#		 so we need to do it manually.
-#
+_MPATH=.mp
+	# Path of the Makefile	#hack
 
-_MP_INSTANCE:=b8de3a
-	# nothing magic about that name - just use anything that's unique (and starts with a letter)
+_MP_INSTANCE:=embedded-rust-2401
+	# use any name that's unique (and starts with a letter)
 
 _MP_SUBFOLDER:=work
 	# where current folder is mapped within MP (actual name doesn't matter)
 
 _MP_PARAMS:=--memory 4G --disk 8G --cpus 2
-	# Use 'multipass info <instance>' to fine tune these
 	#
 	# Memory: Rust Rover Remote Debugging requires 4GB; otherwise gives a warning dialog.
 	#		Rust itself would be fine with, say, 2GB.
@@ -29,8 +25,10 @@ _MP_PARAMS:=--memory 4G --disk 8G --cpus 2
 	# Disk:	3.5GB seems to be needed for Rust installation.
 	#		Rust Rover Remote Debugging demands "4GB free".
 	#		Must be in increments of 512M
+	#
+	# Hint: Use 'multipass info' to see actual usage.
 
-_BEAN:=./.rust-is-up.$(_MP_INSTANCE)
+_BEAN:=$(_MPATH)/.rust-is-up.$(_MP_INSTANCE)
 	# Marker (in the host file system) that running 'rustup' succeeded in the VM
 
 # Comments used by 'make help':
@@ -58,8 +56,6 @@ prep: _mp-rustup
 #test: _mp-rustup
 #	multipass exec -n $(_MP_INSTANCE) -- sh -c 'whoami && . .cargo/env && rustc --version && cargo --version'
 
-a: $(_BEAN)
-
 # Install toolchain
 #
 # Note: Keeping this separate from the image (OS level) installation allows for easier update of the Rust toolchain
@@ -71,7 +67,7 @@ _mp-rustup: $(_BEAN)
 #		create the "bean".
 #
 $(_BEAN): #_mp-image
-	@$(MAKE) _mp-image
+	@$(MAKE) -f $(_MPATH)/Makefile _mp-image
 	@multipass exec --no-map-working-directory $(_MP_INSTANCE) -- sh -c "\
 	  (export _A=tmp/_.sh; install -d ./tmp && \
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o \$$_A && \
@@ -88,7 +84,7 @@ _mp-image: _mp-exists
 	@(multipass list | grep $(_MP_INSTANCE) > /dev/null) || ( \
       multipass launch lts --name $(_MP_INSTANCE) --mount $(shell pwd):/home/ubuntu/$(_MP_SUBFOLDER) $(_MP_PARAMS) && \
       multipass exec $(_MP_INSTANCE) -- sudo apt-get update && \
-      multipass exec $(_MP_INSTANCE) -- sudo apt-get install build-essential \
+      multipass exec $(_MP_INSTANCE) -- sudo apt-get -y install build-essential \
 	)
 
 	@# Note: You may add 'sudo apt-get upgrade' if you wish. Without it, we simply use the latest LTS as-is.
@@ -101,16 +97,12 @@ _mp-exists:
 shell: _mp-image
 	multipass shell $(_MP_INSTANCE)
 
-purge:
-	@-rm $(_BEAN)
-	multipass delete --purge $(_MP_INSTANCE)
+#purge:
+#	@-rm $(_BEAN)
+#	multipass delete --purge $(_MP_INSTANCE)
 
 #---
 echo:
-	@echo A
-
-	@# Note: You may add 'sudo apt-get upgrade' if you wish. Without it, we simply use the latest LTS, without updates.
-    #  multipass exec $(_MP_INSTANCE) -- sudo apt-get upgrade && \
-    # multipass exec $(_MP_INSTANCE) -- sudo apt-get install unzip && \
+	@echo $(MAKE)
 
 .PHONY: help prep test _mp-rustup _mp-image _mp-exists shell purge echo
