@@ -1,127 +1,188 @@
 # Embedded Rover
 
+This repo is based on:
+
+- [The Rust on ESP Book](https://esp-rs.github.io/book/)
+
+   Comprehensive documentation by Espressif on developing on ESP32 boards with Rust. 
+      
+- [ESP32-WSL](https://github.com/lure23/ESP32-WSL)
+
+   Instructions on getting USB device access, onto WSL.
+
+- [ESP32-Mac](https://github.com/lure23/ESP32-Mac)
+
+   Instructions on getting USB device access, onto Multipass (VM) on Mac.
+
+- [esp-template](https://github.com/esp-rs/esp-template)
+
+   `no-std` Rust template, by Espressif.
+   
+<!-- tbd. esp-idf-template
+-->
+   
+---
+
 Platform for starting embedded Rust development, with:
 
 - <font color=green>&check;</font> sandboxing
-- <font color=green>&check;</font> IDE setup (optional)
+- <font color=green>&check;</font> IDE setup
 - <font color=green>&check;</font> flashing to an embedded board
-- <font color=red>TBD</font> debugging
+- <font color=red>TBD</font> IDE debugging
 
-The instructions are currently made for Mac. You will need a Windows PC for the flashing, as well (development board needs to be connected to Windows, not Mac - more details below). 
+The instructions are currently made for Mac. 
 
-Running Multipass on Windows requires a Pro license (for Hyper-V), or involves installing VirtualBox. These options are currently out of reach (or want, in the case of VirtualBox) of the author; he prefers Windows + WSL development (no extras needed; works on Home license) 😀. If you have Windows {10|11} Pro and wish to duplicate the steps, let us know!
+<!-- hidden
+The intention is to support also Windows {10|11} + WSL, eventually.
+-->
 
+>Note for Mac users: You will need a **Windows PC for the flashing**, or do the flashing on your own from within macOS. This is due to no proper open source USB/IP servers on the Mac. See `ESP32-Mac` for details.
+
+<!-- disabled (we're on Mac)
+<p />
+>Running Multipass on Windows requires a Pro license (for Hyper-V), or involves installing VirtualBox. These options are currently out of reach (or want, in the case of VirtualBox) of the author. He prefers adding least host side tools and WSL is from the OS vendor.
+-->
 
 ## Requirements
 
-Mac option:
-
 - [Multipass](http://multipass.run/docs/installing-on-macos) installed
-- Gnu Make installed
+- [Rust Rover Preview](https://www.jetbrains.com/rust/) installed
 
-   >For Mac, comes with Apple's Command Line Developer Tools: `xcode-select --install`
-
-   <font color=red>*tbd. Going to replace that with shell script*</font>
-- [Rust Rover Preview](https://www.jetbrains.com/rust/) installed (optional)
-
-
-For communicating with the development board, you need a Windows PC. Unfortunately, the author hasn't been successful in setting up a `usbipd` server on a Mac. NOTE: If you don't mind installing a free but commercial tool, that's probably possible as well. 
-
-Full story in: [https://github.com/lure23/ESP32-Mac](https://github.com/lure23/ESP32-Mac)
+For communicating with the development board, you need a Windows PC (Windows 10 Home will do).
 
 <small>
 > Developed on:
 > 
 > - macOS 14.2
 > - Multipass 1.13.0-rc
-> - Gnu make 3.81
 </small>
 
 ## Why sandboxing?
 
-Rust is about safety and security. But installing a development toolchain natively always offers ways for tool or library authors (or intruders who got access to said tools' build chain) to peek into secrets on your developer account. The author doesn't want this; nor is it necessary any more, because of virtualization and IDE support for remote development.
+Rust is about safety and security. But installing a development toolchain natively always offers ways for tool or library authors (or intruders who got access to said tools' build chain) to peek into secrets on your developer account. This can be passwords, emails, business documents. You don't want that. 
 
->Consider: Just the way [`rustup` is installed](https://rustup.rs) downloads a script from the Internet and executes it. Even if I trust Rust, it places their website as a lucrative target for attacks.
+Nor is it necessary to develop on one's full account, any more. We have virtualization and IDE support for remote development. This is becoming a common trend in web development. The role of this repo is to bring it to embedded, ESP32, development as well.
+
+>Consider: Just the way [`rustup` is installed](https://rustup.rs) downloads a script from the Internet and executes it. Even if we trust Rust, it makes their website a lucrative target for attacks.
 
 This repo showcases use of Multipass and Rust Rover (IDE) for this purpose. This means you end up trusting: 
 
 - your OS provider
-- Canonical (for Multipass; they are also an OS provider)
+- Canonical (for Multipass)
 - JetBrains (the IDE)
 
->In addition, on Windows you will trust Silicon Labs and a GitHub repo with 2.6k stars.
+In addition, on Windows you will trust Silicon Labs for a driver and `usbip-win` GitHub repo with 2.6k stars.
 
-Especially, with the sandboxing arrangement, you don't necessarily need to install e.g. [HomeBrew](https://brew.sh/) on Macs, reducing your developer account's attack surface. In fact, avoiding HomeBrew (though it's great!) is one of the aims of the author.
+>Especially, with the sandboxing arrangement, you don't necessarily need to install [HomeBrew](https://brew.sh/) - a command line tools ecosystem, at all. This reduces your developer account's attack surface. In fact, making HomeBrew optional (though it's great!) is one of the aims of the author.
 
----
-
-There are other discussions in the `DEVS` folder.
-
----
 
 ### Other benefits
 
 1. With sandboxing, your build system and tool dependencies are more clearly specified and reproducible by other developers (e.g. versioning of OS and build tools)
 2. Easy to toss away unnecessary build environments.
 
-   This is a big change! If you've "treated containers like cattle" - it's the same for one's development stup. Moo!
+   This is a big change! If you've "treated containers like cattle" - it's the same for one's development setup. Moo!!!
 
 ## CI
 
-You can still develop also with natively installed tools, and this is the mode you should use in CI, since it's already a sandboxed environment with (hopefully) no access to crucial secrets, except for in production installations. You can build code with less secrets and expose them only for the deployment step (where necessary tools are less).
+You can still develop also with native tools, and this is the mode you should use in CI, since it's already a sandboxed environment with (hopefully) no access to crucial secrets, except for in production installations. You can build code with less secrets and expose them only for the deployment step (where necessary tools are less).
 
-
-
-## Step 1. Prepare the Windows PC
-
-You will eventually need to communicate with a development board. To do so, we are going to use a protocol called `usbip` (USB over IP). 
-
-Study [https://github.com/lure23/ESP32-WSL](https://github.com/lure23/ESP32-WSL) and follow the parts about installing a device driver and setting up the server-side `usbipd` software. You can skip the WSL parts. And DO NOT `attach` the board, yet.
-
-After this, you will have:
-
-- the IP of the Windows PC in your network (e.g. `192.168.1.29`)
-- the "bus id" of the development board (e.g. `3-1`)
-
-..and you have executed
-
-```
-> usbipd bind -b 3-1
-```
-
-This claims the board for us in the `usbip` world.
-
->❗️ DO NOT do the `attach` from the Windows side. We do it from Multipass.
+>This ability to develop natively also means that your colleagues don't need to transition to this method when you do. Sandboxing is just a user-specific choice.
 
 
 ## Launch Multipass
 
 ```
-$ make -f .mp/Makefile prep
-...
-Multipass IP (embedded-rust-20): 192.168.64.55
+$ ./prep.sh 
+Launched: embedded-rover
+Mounted './mp-prime' into 'embedded-rover:/home/ubuntu/.mp-prime'
+Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
+[...]
+Multipass IP (embedded-rover): 192.168.64.55
 
 rustc 1.74.1 (a28077b28 2023-12-04)
 cargo 1.74.1 (ecb9851af 2023-10-18)
  
 ```
 
-Downloads the Ubuntu image, sets it up for Rust development, and leaves the virtual machine running in the background.
+This command does multiple things:
 
+1. Creates a Multipass VM called `embedded-rover`
+
+   This is the VM you can use for developing embedded Rust projects, within Multipass.
+
+2. Installs Rust, Cargo and ESP development tools
+
+3. Installs drivers, needed to communicate with a development board outside the Multipass VM.
+
+<!-- disabled
 >Note the IP address printed out - you'll need it for Remote Development setup of Rust Rover.
+-->
+
+## Set up a sample
+
+```
+$ multipass shell embedded-rover
+[...]
+
+ubuntu@embedded-rover-1:~$
+```
+
+This takes you inside the Multipass VM that we set up, above. This is a Linux terminal.
+
+>We'll use `~$` as the prompt when showing commands you can type within Multipass (Linux).
+
+```
+~$ mkdir work
+~$ cd work
+```
+
+Let's use the `cargo generate` template from [The Rust on ESP Book](https://esp-rs.github.io/book/writing-your-own-application/generate-project/index.html) as a warmup. 🧘🧣
+
+>btw. That book is good! If you wish to take a break, you can read it now. Or do both in parallel. :)
+
+Let's start with a `no-std` sample:
+
+```
+~$ $ cargo generate esp-rs/esp-template
+⚠️   Favorite `esp-rs/esp-template` not found in config, using it as a git repository: https://github.com/esp-rs/esp-template.git
+🤷   Project Name: sample1
+🔧   Destination: /home/ubuntu/sample1 ...
+🔧   project-name: sample1 ...
+🔧   Generating template ...
+✔ 🤷   Which MCU to target? · esp32c3
+✔ 🤷   Configure advanced template options? · false
+🔧   Moving generated files into: `/home/ubuntu/sample1`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /home/ubuntu/sample1
+```
+
+This creates:
+
+```
+sample1
+├── Cargo.toml
+├── LICENSE-APACHE
+├── LICENSE-MIT
+├── rust-toolchain.toml
+└── src
+    └── main.rs
+```
+
+We can now set up Rust Rover (IDE) to have a look at this sample, and flash it to your device.
 
 
-## Rust Rover (optional)
+## Rust Rover
+
+Rust Rover is a modern IDE that supports remote development that supports remote debugging (though not of embedded products; more about that later).
 
 **SSH key**
 
-Multipass uses an SSH key pair to communicate between your developer account and the Multipass virtual machine. We need to provide the *private key* of this pair to Rust Rover, so that it can initiate an ssh tunnel with the virtual machine's `ubuntu` account.
+Multipass uses an SSH key pair to communicate between your developer account and the Multipass virtual machine. We provide the *private key* of this pair to Rust Rover, so that it can initiate an ssh tunnel with the virtual machine's `ubuntu` account.
 
-The private key is stored in:
+The private key is stored in (macOS):
 
-||path|
-|---|---|
-|macOS|`/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa`|
+- `/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa`
 
 <!-- TBD. Windows + WSL
 |Linux, via&nbsp;Snap|`/var/snap/multipass/common/data/multipassd/ssh-keys/id_rsa`|
@@ -133,10 +194,10 @@ The key is appropriately accessible for super-user only. We copy it somewhere wh
 
 <p />
 
->Note: There are other ways of arranging the ssh connection between the parties. See the links under References if you are not at ease with this.
+>Note: There are other ways of arranging the ssh connection between the parties. You can eg. create a new key pair, but it seems unnecessary since we already have a pair.
 
 <p />
->Exposing the private key to user side is not a grade security issue. It's only used to access a child environment, and that environment can be accessed (by `multipass shell`) from our command line, anyways.
+>Exposing the private key to user side is not a security issue. It's only used to access a child environment, and that environment can be accessed (by `multipass shell`) from our command line, anyways.
 
 ```
 $ (sudo cat "/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa") > multipassd.key
@@ -144,14 +205,21 @@ $ (sudo cat "/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa") 
 
 >Note: The quotes are needed because there's a space in the path.
 
+Remember the path where you placed the key.
+
+**Close earlier connections**
+
+You can have only one remote development session open at a time (as of Jan'24). If you've already worked with Rust Rover, check that the `JetBrains Client-EAP` doesn't have an active windows. If it has, close it.
+
+Otherwise you'll get an error when trying to connect to the remote instance.
+
 **Connecting to Remote client**
 
-1. Open Rust Rover application
-2. `File` > `Remote Development...`
+1. Open Rust Rover application; then `File` > `Remote Development...`
 
    ![](.images/remote-dev-start.png)
 
-3. `New Connection`
+2. `New Connection`
 
 	Fill in the fields like in the screenshot, and..
 
@@ -159,13 +227,13 @@ $ (sudo cat "/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa") 
 
    ..press Enter or `Check Connection and Continue`.   
 
-4. Authenticity warning should show up.
+3. Authenticity warning should show up.
 
    ![](.images/auth-warning.png)
 
    Press `OK`.
 
-5. If the connection works, you'll be greeted with:
+4. If the connection works, you'll be greeted with:
 
 	![](.images/connection-successful.png)
 
@@ -178,197 +246,105 @@ $ (sudo cat "/var/root/Library/Application Support/multipassd/ssh-keys/id_rsa") 
    The outcome of all this should be that you see the project opened, as a remote development session:
    
    ![](.images/opened-remotely.png)
+
+>Note: The process will take some time. You can open the `Show all` view to follow the progress:
+>
+>![](.images/initial-slowness.png)
    
 
-**Build and Debug!!**
-
-You should now be able to build the sample program (`src/main.rs`)..
-
-![](.images/hammer.png)
+**Build!**
 
 Click the hammer icon on the toolbar.
 
+![](.images/build-run-debug-icons.png)
+
 The build should start and show up in the console. 
 
-![](.images/build-result.png)
+![](.images/build-ongoing.png)
 
->Note that this happens in the remote instance.
-
-<p />
+<!-- remove - we've already waited for the updates (Run and Debug are lit)
 >Keep an eye on the ![](.images/remote-ide-forever-bar.png) build progress bar at the bottom of the IDE. It *will* take a few minutes to complete, fetching dependencies! Only then the `Run` and `Debug` icons light up!!
+-->
 
-![](.images/run-menu.png)
+**Run???**
 
-This means we can run and debug the remote instance. YAY!!!
+Before we can run the sample, there needs to be a connection to the target device.
 
-Push `Run`.
+1. Set up a `usbipd` server, as described in [Appendix B](#appendix-b-windows-side-preparation).
 
-![](.images/run-success.png)
+   >**You need a Windows PC for this.** If you know, how to set up a `usbipd` server on Mac - that works with the ESP32 board you have - leave a PR in [ESP32-Mac](https://github.com/lure23/ESP32-Mac).
 
-Make a breakpoint on line 2 (click it) and press `Debug`.
+2. With the IP of the Windows USB host known, and `usbipd bind` run on it, let's try attaching to the USB development board from within Multipass VM!
 
-![](.images/set-breakpoint.png)
+   ```
+   ~$ sudo usbip attach -r 192.168.1.29 -b 3-1
+   ```
 
-![](.images/debug-at-breakpoint.png)
+   ```
+   ~$ lsusb
+   Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+   Bus 001 Device 002: ID 10c4:ea60 Silicon Labs CP210x UART Bridge   <<--
+   Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+   ```
 
-If we had variables, you would see their values here. Press `Resume Program` to let it run its way. 
+3. Within Rust Rover, push `Run`.
 
-This concludes our setup!
+   ![](.images/run1.png)
 
-You now have a working, sandboxed environment for Rust development.
-
-
-
-
-<!-- DISABLED; may not have been needed?
-Next, we need to create a configuration so that the debugging features of the IDE can be utilized.
-
-1. Click `Current File` > `Edit Configurations...`
-
-   ![](.images/edit-configs.png)
-
-	.. `+` > `Cargo`
-	
-	>If you've used any JetBrains IDEs before, this should look familiar. It's where compile/debug/test time properties are declared. You can define multiple such configurations, if you have the need.
-	
-   Switch `Run on:` to `SSH`
+   >It *looks* like nothing's happening, but that's simply the `espflash` progress bar and Rust Rover not quite finding themselves. Scroll down, and you'll be greeted with:
+   >
+   >![](.images/run-scrolled.png)
    
-   ![](.images/run-on-ssh.png)
-
-   ..and provide the host and username values
+   Note the "Hello, world" output. 
    
-   ![](.images/target-1.png)
+   You can now launch *any* ESP32 program from within the IDE!
+   
+   ![](.images/free/icegif-673.gif)
 
-	>Note: The author doesn't know why JetBrains EAP wouldn't use the values we've already provided. 
-	>If you don't remember the IP, you can run `make prep` again. It doesn't harm.
+	*<div align=right><font color=gray size=-1>image source: <a href=https://www.icegif.com/fireworks-14>icegif.com</a></font></div>*
 
-	Note that this is display `1/4` of the target wizard. Let's see what's coming - press `Next`.
-	
-   ![](.images/target-2a.png)
 
-	We've seen that! Press `OK`.
-	
-	>⚠️ The reason we get the same request again must be due to still suboptimal integration between the Rust Rover (where we've OK'ed this) and the EAP client (who's now asking). Rust Rover is still in PREVIEW mode; hopefully this section of target creation gets ironed out before actual release!
+**Debug???**
 
-   ![](.images/target-2.png)
+Stop the running code.
 
-	>The "private key" asked here *should* be from our local (desktop) account, right?  But the dialog presents the file system of the remote instance... That's strange.
-	>
-	>We happen to share the key on that side, too, so let's pick it.
-	>
-	>Ideally, NONE OF THIS SHOULD BE SEEN since we've already touched base with the remote client.
+NOW! This is easily said, but doesn't seem possible. See [TRACK](./TRACK.md).
 
-	><font color=red>JetBrains BUG??</font> Should the dialog show local files - but then again, please cut this whole wizard out? 🙂
+- Close the VM by `multipass restart embedded-rover` in the macOS command line
+- Close EAP client
+- start again
 
-	![](.images/target-3.png)
-	
-	Press `Next`.
-	
-	![](.images/target-4.png)
-
-	Here, no changes are needed.
-	
-	>Note: If you click the "configure existing..." and check `rsync` connection, it seems to be there just fine.
-	>
-	><font color=orange>JetBrains: Can you remove the warning text if `rsync` connection is available?</font> - or am I doing something wrong..
-
-	![](.images/target-created.png)
-	
-	We now have a Rust compilation/debug/testing target that's remote. Press `OK`.
-	
-	![](.images/target-is-there.png)
-	
-	Notice that there's a new `Run` target. Click it!
-
----
-‼️	Here, EAP seems to get stuck for a while (> 1 min?) and then fails.
-
-![](.images/run-stuck!.png)
-
-☐ <font color=red>JetBrains BUG</font> or an issue with my setup=?
+>NOTE!! If you use `cargo run` from the IDE Terminal, instead of integrated `Run` command, you can stop the execution with `Ctrl-C`.
 
 ---
 
-The `Debug` feature doesn't seem to be implemented, at this moment (2023.3.1 EAP).
+Rust Rover (Preview) does not support debugging the ESP32 architectures.
 
--->
+This means I cannot eg. set a breakpoint, wait until the execution comes there, and see the values of variables at that place.
 
+How does Espressif do this?
 
-<!-- DISABLED since we got Debug to work
-## You leave me here??
-
-Yes. :)
-
-Though the IDE features seem to be still in flux, you can *absolutely* do development using the Rust Rover + EAP + Multipass toolchain.
-
-![](.images/terminal-run.png)
-
-Press the terminal icon (highlighted in the screen shot) and you can do the normal `cargo run`, `cargo build` etc. in the remote instance.
-
-What you'll get in addition is:
--->
+<font color=red>tbd. What can we do fro mthe terminal?</font>
 
 
-## Communicating with the ESP32 device
 
-*tbd. MUCH OF THIS deserves to get automated. You'll need to set up an `usbipd` server on a Windows machine, and provide its:
-- ip
-- busid
-*
+## Appendix A. Troubleshooting
 
-<!-- disabled!
-### Prepare for `usbip` (communications with the embedded device)
+### Unable to connect for Remote Development
 
-- [ESP32-Mac](https://github.com/lure23/ESP32-Mac) (GitHub)
+If you get an error after pressing `Download IDE and Connect`, check that you don't already have an active EAP session running.
 
-*tbd. Eventually, this should be automated. For now, do the steps manually.*
-
-```
-$ multipass shell embedded-rust-20
-```
-
-Starts a Multipass (Ubuntu) shell. You may want to change the look of this terminal window (right click > `Show Inspector`) to separate it from macOS terminals.
-
-```
-~$ sudo apt-get install linux-tools-generic
-```
-
-Installs `usbip` client.
-
-```
-$ sudo apt install linux-modules-extra-$(uname -r)
-```
-
-Installs some device drivers otherwise missing in the Multipass (Ubuntu 22.04 LTS) image:
-
-```
-$ sudo ls -al /lib/modules/$(uname -r)/kernel/drivers/usb/usbip/
-[...]
--rw-r--r--  1 root root  66033 Nov 14 12:47 usbip-core.ko
--rw-r--r--  1 root root  76217 Nov 14 12:47 usbip-host.ko
--rw-r--r--  1 root root  58217 Nov 14 12:47 usbip-vudc.ko
--rw-r--r--  1 root root 108313 Nov 14 12:47 vhci-hcd.ko
-```
-
-```
-$ sudo modprobe vhci-hcd
-```
-
-Starts the device driver modules.
-
-```
-$ sudo echo "vhci_hcd" >> /etc/modules-load.d/modules.conf
-$ sudo echo "usbip_core" >> /etc/modules-load.d/modules.conf
-```
-
-Takes care that the modules are launched again, if there are VM restarts.
+If you do, close it and try connection again. 
 
 
-### Windows side preparation
+
+## Appendix B. Windows side preparation
 
 Follow the steps in the [https://github.com/lure23/ESP32-WSL](https://github.com/lure23/ESP32-WSL) repo, to install device drivers and set up `usbip` sharing for them. 
 
 >This requires a Windows computer. The author was unable to set up `usbipd` properly, on a Mac. See [https://github.com/lure23/ESP32-Mac](https://github.com/lure23/ESP32-Mac) if you wish to help.
+
+In a command prompt with Admin rights:
 
 ```
 > usbipd list
@@ -415,31 +391,11 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 
 That should be it!
--->
 
-
-
-## Next 
-
-We can each go our ways, now. Use the `Makefile` in this repo as a basis for your Rust endeavours, if you like. Consider it Public Domain.
-
-The author has an ESP32 board in mail, for being the target of his Rust adventures. There may be additions to this repo (thus its name, "Embedded Rover").
-
-What's naturally welcome are:
-
-- any corrections; either in Discussions, Issues or PRs. Thanks!!!
-- additional material on setting up the same on Windows + WSL2 developer account (or Linux)
-
-   >Note! Multipass requires a Windows Pro license, in order to use Hyper-X virtualization. Otherwise you'll need to install VirtualBox. 🥴
-
-
-That's all for now! 🌼
 
 
 ## References
 
 - [Enable ssh access to multipass vms](https://dev.to/arc42/enable-ssh-access-to-multipass-vms-36p7) (blog; Aug-22)
 
-   Describes, how to use an existing ssh key, to reach Multipass. Needed for Rust Rover to do Remote Development.
-
-- [Multipass Key-Based Authentication](https://www.ivankrizsan.se/2020/12/23/multipass-key-based-authentication/) (blog; Dec-20)
+   Describes, how to use an existing ssh key, to reach Multipass.

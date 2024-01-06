@@ -1,5 +1,11 @@
 # Changes
 
+## 6-Jan-24
+
+Different approach. Work folders will be mapped (optional) by the user, as needed.
+
+Ready for comments and reproduction!
+
 ## 1-Jan-24
 
 - Moved Multipass specific files, e.g. `Makefile` to `.mp/`

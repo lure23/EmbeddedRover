@@ -1,9 +1,2 @@
-# In your own project, encouraged to let Cargo.lock in the version control. Here ignored, because of just sample.
-/Cargo.lock
-
-# Rust itself
-/target/
-
-# IDE
 /.idea/
 /multipassd.key
