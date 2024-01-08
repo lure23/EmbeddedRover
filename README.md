@@ -304,7 +304,7 @@ Before we can run the sample, there needs to be a connection to the target devic
 	*<div align=right><font color=gray size=-1>image source: <a href=https://www.icegif.com/fireworks-14>icegif.com</a></font></div>*
 
 
-**Debug???**
+**Interim - PLEASE 🛑**
 
 Stop the running code.
 
@@ -316,19 +316,103 @@ NOW! This is easily said, but doesn't seem possible. See [TRACK](./TRACK.md).
 
 >NOTE!! If you use `cargo run` from the IDE Terminal, instead of integrated `Run` command, you can stop the execution with `Ctrl-C`.
 
----
 
-Rust Rover (Preview) does not support debugging the ESP32 architectures.
+**State of (remote) debugging?**
 
-This means I cannot eg. set a breakpoint, wait until the execution comes there, and see the values of variables at that place.
+Rust Rover (Preview) does not support debugging other than a few (`x86_64` and `arm64`) architectures.
 
-How does Espressif do this?
+However, IntelliJ's other IDE, CLion, does. It does this using [OpenOCD](https://openocd.org) support. 
 
-<font color=red>tbd. What can we do fro mthe terminal?</font>
+There is also another debugging ecosystem, called `probe-rs`, in the Rust world. The Rust on ESP book [lists their support](https://esp-rs.github.io/book/tooling/debugging/index.html):
+
+![](.images/rust-debugging-readiness.png)
+
+That looks pretty good!
+
+Let's set the repo ready for OpenOCD, so if (when) IntelliJ decides it's supported not only by CLion but Rust Rover as well, we are ready. 
+
+After that, we'll look into how debugging can currently be done, from the terminal (no IDE).
+
+
+<!-- yeah right, did not work.. #later
+**Trying 'std' sample**
+
+Before we get to OpenOCD, let's do another Rust sample. This one is based on [esp-idf-template](https://esp-rs.github.io/book/writing-your-own-application/generate-project/esp-idf-template.html).
+
+Within the VM, install "IDF" dependencies:
+
+```
+~$ . ~/.mp-prime/esp-idf-template.sh
+```
+
+These are not necessarily set up, by default, to save space. `#flux`
+
+```
+$ cd
+
+$ cargo generate esp-rs/esp-idf-template cargo
+⚠️   Favorite `esp-rs/esp-idf-template` not found in config, using it as a git repository: https://github.com/esp-rs/esp-idf-template.git
+🤷   Project Name: hello
+🔧   Destination: /home/ubuntu/hello ...
+🔧   project-name: hello ...
+🔧   Generating template ...
+✔ 🤷   Which MCU to target? · esp32c3
+✔ 🤷   Configure advanced template options? · true
+✔ 🤷   ESP-IDF version (master = UNSTABLE) · v5.1
+✔ 🤷   Enable STD support? · true
+✔ 🤷   Configure project to use Dev Containers (VS Code and GitHub Codespaces)? · true
+✔ 🤷   Configure project to support Wokwi simulation with Wokwi VS Code extension? · false
+✔ 🤷   Add CI files for GitHub Action? · false
+🔧   Moving generated files into: `/home/ubuntu/hello`...
+🔧   Initializing a fresh Git repository
+✨   Done! New project created /home/ubuntu/hello
+```
+
+Close any existing Remote Development session:
+
+- JetBrains EAP Client > `File` > `Close project` (or just close the window) > ![](.images/close-and-stop.png)
+
+- Note that both JetBrains EAP Client and the Java application icons disappear. Rust Rover remains running.
+
+- Here, instead of `New Project`, use the existing VM entry and click `+`:
+
+   ![](.images/open-second-project.png)
+   
+   This adds a new project folder to an existing remote instance.
+
+- Try `cargo build`
+
+   ![](.images/std-err-no-somaxconn.png)
+
+   That could be anything!  Not going further - best to wait, since these are "nightly"?
+   
+   🛑
+-->   
+
+
+**Launching OpenOCD**
+
+It's possible Rust Rover will support debugging over OpenOCD, at some point. Let's be prepared?
+
+For ESP32-C3:
+
+```
+$ openocd -f board/esp32c3-builtin.cfg
+```
 
 
 
-## Appendix A. Troubleshooting
+<!-- tbd. Installing / using OpenOCD?
+-->
+
+
+**Debugging Rust code running in ESP32??**
+
+<font color=red>tbd. What can we do from the terminal?</font>
+
+
+
+## Troubleshooting
 
 ### Unable to connect for Remote Development
 
@@ -336,6 +420,36 @@ If you get an error after pressing `Download IDE and Connect`, check that you do
 
 If you do, close it and try connection again. 
 
+
+### Disk full!
+
+First, you can try:
+
+```
+~$ rm -rf ~/.cache/*
+```
+
+>To see how much space is available:
+>
+>```
+>~$ df -h .
+>Filesystem      Size  Used Avail Use% Mounted on
+>/dev/sda1        12G  9.5G  2.0G  84% /
+>```
+
+It's good to have ~2G airspace.
+
+---
+
+If you need to extend the  Multipass VM, that's possible (but requires you to close the VM):
+
+```
+$ multipass stop embedded-rover
+
+$ multipass set local.embedded-rover.disk=12G
+
+$ multipass shell embedded-rover
+```
 
 
 ## Appendix B. Windows side preparation

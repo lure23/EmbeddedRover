@@ -5,6 +5,12 @@ Here are issues that have been spotted on:
 - RustRover Preview
 
 
+## How to install `openocd` (on ESP32-C3)?
+
+[Comment of "Improve debuging section"](https://github.com/esp-rs/book/issues/105#issuecomment-1881690294)
+
+
+
 ## `Run` output misbehaves on ESP32
 
 `RustRover 2023.3 EAP`

@@ -16,7 +16,6 @@ sudo -- sh -c "apt-get install -y git curl llvm-dev libclang-dev clang unzip lib
   #   Cleaning the cache removed - we actually _want_ (= need!!) e.g. 'linux-modules-extra-*' to remain available!
   # Added: 'build-essential'
 
-#
 #--- Normal user ('ubuntu') ---
 
 # Install rustup
@@ -54,11 +53,7 @@ ARCH=$($HOME/.cargo/bin/rustup show | grep "Default host" | sed -e 's/.* //') &&
 #    chmod u+x "${HOME}/.cargo/bin/web-flash"
 
 # Install Xtensa Rust
-# (skipped; add here)
+# (skipped)
 
-# tbd. see what that does.
-# tbd. Make it idempotent: add only once
-#
+# No need? (wasn't on disk)
 #!echo "source /home/${CONTAINER_USER}/export-esp.sh" >> ~/.bashrc
-
-
