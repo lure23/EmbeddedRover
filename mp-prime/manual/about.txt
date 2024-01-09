@@ -1,0 +1,7 @@
+
+This folder has scripts that you can manually install on the Multipass VM.
+
+The reason these are not automatic may be:
+- not needed by all installations / use cases
+- needs manual intervention anyways (e.g. providing the precise target id)
+
