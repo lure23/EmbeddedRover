@@ -5,9 +5,11 @@ Here are issues that have been spotted on:
 - RustRover Preview
 
 
-## How to install `openocd` (on ESP32-C3)?
+## Running OpenOCD ESP32 variant
 
-[Comment of "Improve debuging section"](https://github.com/esp-rs/book/issues/105#issuecomment-1881690294)
+- [Issue 311](https://github.com/espressif/openocd-esp32/issues/311) on `openocd-esp32`
+
+- [ ] Can we get a comment from Espressif?
 
 
 
@@ -115,3 +117,10 @@ Actual:
 Work-around:
 
 - Manually close the EAP Client, and try again.
+
+
+## Rust Rover - Umbrella ticket on Embedded use case
+
+- [Support embedded debugging](https://youtrack.jetbrains.com/issue/RUST-12499)
+
+   JetBrains collects embedded debugging use cases / issues under this ticket.

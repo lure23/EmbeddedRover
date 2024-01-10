@@ -81,14 +81,15 @@ install -d ~/esp
 
 #---
 # udev rules file:
-#   60-openocd.rules to /etc/udev/rules.d
+#   60-openocd.rules to /etc/udev/rules.d/
 #
 # https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-guides/jtag-debugging/configure-builtin-jtag.html#configure-usb-drivers
 #
-[ -f /etc/udev/rules.d/60-openocd.rules ] || (
-  curl -Ls https://github.com/espressif/openocd-esp32/blob/master/contrib/60-openocd.rules | \
-    (sudo -- sh -c "cat >/etc/udev/rules.d/60-openocd.rules")
-)
+#![ -f /etc/udev/rules.d/60-openocd.rules ] || (
+#!  curl -fsSL https://github.com/espressif/openocd-esp32/blob/master/contrib/60-openocd.rules | \
+#!    sudo tee /etc/udev/rules.d/60-openocd.rules
+#!)
+  # tbd. TEST ABOVE CODE - and enable.  Made changes; not tested.
 
 #
 cat <<EOF

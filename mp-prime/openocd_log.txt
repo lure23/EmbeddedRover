@@ -1,0 +1,147 @@
+User : 3 2 options.c:52 configuration_output_handler(): debug_level: 3User : 4 2 options.c:52 configuration_output_handler(): 
+Debug: 5 2 options.c:233 add_default_dirs(): bindir=/builds/idf/openocd-esp32/_build/../openocd-esp32/bin
+Debug: 6 2 options.c:234 add_default_dirs(): pkgdatadir=/builds/idf/openocd-esp32/_build/../openocd-esp32/share/openocd
+Debug: 7 2 options.c:235 add_default_dirs(): exepath=/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/bin
+Debug: 8 2 options.c:236 add_default_dirs(): bin2data=../share/openocd
+Debug: 9 2 configuration.c:33 add_script_search_dir(): adding /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts
+Debug: 10 2 configuration.c:33 add_script_search_dir(): adding /home/ubuntu/.config/openocd
+Debug: 11 2 configuration.c:33 add_script_search_dir(): adding /home/ubuntu/.openocd
+Debug: 12 2 configuration.c:33 add_script_search_dir(): adding /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/bin/../share/openocd/site
+Debug: 13 2 configuration.c:33 add_script_search_dir(): adding /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/bin/../share/openocd/scripts
+Debug: 14 2 command.c:151 script_debug(): command - ocd_find board/esp32c3-builtin.cfg
+Debug: 15 2 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/board/esp32c3-builtin.cfg
+Debug: 16 3 command.c:151 script_debug(): command - ocd_find interface/esp_usb_jtag.cfg
+Debug: 17 3 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/interface/esp_usb_jtag.cfg
+Debug: 18 3 command.c:151 script_debug(): command - adapter driver esp_usb_jtag
+Info : 19 3 transport.c:106 allow_transports(): only one transport option; autoselecting 'jtag'
+Debug: 20 3 command.c:151 script_debug(): command - espusbjtag vid_pid 0x303a 0x1001
+Info : 21 3 esp_usb_jtag.c:901 esp_usb_jtag_vid_pid(): esp_usb_jtag: VID set to 0x303a and PID to 0x1001
+Debug: 22 3 command.c:151 script_debug(): command - espusbjtag caps_descriptor 0x2000
+Info : 23 3 esp_usb_jtag.c:912 esp_usb_jtag_caps_descriptor(): esp_usb_jtag: capabilities descriptor set to 0x2000
+Debug: 24 3 command.c:151 script_debug(): command - adapter speed 40000
+Debug: 25 3 adapter.c:249 adapter_config_khz(): handle adapter khz
+Debug: 26 3 adapter.c:213 adapter_khz_to_speed(): convert khz to adapter specific speed value
+Debug: 27 3 adapter.c:213 adapter_khz_to_speed(): convert khz to adapter specific speed value
+Debug: 28 3 command.c:151 script_debug(): command - ocd_find target/esp32c3.cfg
+Debug: 29 3 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/target/esp32c3.cfg
+Debug: 30 3 command.c:151 script_debug(): command - ocd_find target/esp_common.cfg
+Debug: 31 4 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/target/esp_common.cfg
+Debug: 32 5 command.c:151 script_debug(): command - ocd_find bitsbytes.tcl
+Debug: 33 5 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/bitsbytes.tcl
+Debug: 34 5 command.c:151 script_debug(): command - ocd_find memory.tcl
+Debug: 35 5 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/memory.tcl
+Debug: 36 5 command.c:151 script_debug(): command - ocd_find mmr_helpers.tcl
+Debug: 37 5 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/mmr_helpers.tcl
+Debug: 38 5 command.c:151 script_debug(): command - ocd_find target/esp_version.cfg
+Debug: 39 5 configuration.c:88 find_file(): found /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/target/esp_version.cfg
+Debug: 40 5 command.c:151 script_debug(): command - version
+Debug: 41 6 command.c:151 script_debug(): command - add_help_text program_esp write an image to flash, address is only required for binary images. verify, reset, exit, compress, restore_clock and encrypt are optional
+Debug: 42 6 command.c:151 script_debug(): command - add_usage_text program_esp <filename> [address] [verify] [reset] [exit] [compress] [no_clock_boost] [restore_clock] [encrypt]
+Debug: 43 6 command.c:151 script_debug(): command - add_help_text program_esp_bins write all the images at address specified in flasher_args.json generated while building idf project
+Debug: 44 6 command.c:151 script_debug(): command - add_usage_text program_esp_bins <build_dir> flasher_args.json [verify] [reset] [exit] [compress] [no_clock_boost] [restore_clock]
+Debug: 45 6 command.c:151 script_debug(): command - add_help_text esp_get_mac Print MAC address of the chip. Use a `format` argument to return formatted MAC value
+Debug: 46 6 command.c:151 script_debug(): command - add_usage_text esp_get_mac [format]
+Debug: 47 6 command.c:151 script_debug(): command - jtag newtap esp32c3 cpu -irlen 5 -expected-id 0x00005c25
+Debug: 48 6 tcl.c:419 handle_jtag_newtap_args(): Creating New Tap, Chip: esp32c3, Tap: cpu, Dotted: esp32c3.cpu, 4 params
+Debug: 49 6 core.c:1476 jtag_tap_init(): Created Tap: esp32c3.cpu @ abs position 0, irlen 5, capture: 0x1 mask: 0x3
+Debug: 50 6 command.c:151 script_debug(): command - target create esp32c3 esp32c3 -chain-position esp32c3.cpu -coreid 0 -rtos FreeRTOS
+Debug: 51 6 target.c:2166 target_free_all_working_areas_restore(): freeing all working areas
+Debug: 52 6 FreeRTOS.c:1414 freertos_create(): freertos_create
+Debug: 53 6 command.c:285 register_command(): command 'esp' is already registered
+Debug: 54 6 command.c:285 register_command(): command 'esp32c3 esp' is already registered
+Debug: 55 6 command.c:151 script_debug(): command - esp32c3 configure -work-area-phys 0x3FC80000 -work-area-virt 0x3FC80000 -work-area-size 0x24000 -work-area-backup 1
+Debug: 56 6 target.c:2166 target_free_all_working_areas_restore(): freeing all working areas
+Debug: 57 6 target.c:2166 target_free_all_working_areas_restore(): freeing all working areas
+Debug: 58 6 target.c:2166 target_free_all_working_areas_restore(): freeing all working areas
+Debug: 59 6 target.c:2166 target_free_all_working_areas_restore(): freeing all working areas
+Debug: 60 6 command.c:151 script_debug(): command - flash bank esp32c3.flash esp32c3 0x0 0 0 0 esp32c3
+Debug: 61 6 command.c:285 register_command(): command 'esp' is already registered
+Debug: 62 6 tcl.c:1307 handle_flash_bank_command(): 'esp32c3' driver usage field missing
+Debug: 63 6 command.c:151 script_debug(): command - flash bank esp32c3.irom esp32c3 0x0 0 0 0 esp32c3
+Debug: 64 6 command.c:285 register_command(): command 'esp' is already registered
+Debug: 65 6 command.c:285 register_command(): command 'esp appimage_offset' is already registered
+Debug: 66 6 command.c:285 register_command(): command 'esp compression' is already registered
+Debug: 67 6 command.c:285 register_command(): command 'esp verify_bank_hash' is already registered
+Debug: 68 6 command.c:285 register_command(): command 'esp flash_stub_clock_boost' is already registered
+Debug: 69 6 command.c:285 register_command(): command 'esp encrypt_binary' is already registered
+Debug: 70 6 command.c:285 register_command(): command 'esp stub_log' is already registered
+Debug: 71 6 tcl.c:1307 handle_flash_bank_command(): 'esp32c3' driver usage field missing
+Debug: 72 6 command.c:151 script_debug(): command - flash bank esp32c3.drom esp32c3 0x0 0 0 0 esp32c3
+Debug: 73 6 command.c:285 register_command(): command 'esp' is already registered
+Debug: 74 6 command.c:285 register_command(): command 'esp appimage_offset' is already registered
+Debug: 75 6 command.c:285 register_command(): command 'esp compression' is already registered
+Debug: 76 6 command.c:285 register_command(): command 'esp verify_bank_hash' is already registered
+Debug: 77 6 command.c:285 register_command(): command 'esp flash_stub_clock_boost' is already registered
+Debug: 78 6 command.c:285 register_command(): command 'esp encrypt_binary' is already registered
+Debug: 79 6 command.c:285 register_command(): command 'esp stub_log' is already registered
+Debug: 80 6 tcl.c:1307 handle_flash_bank_command(): 'esp32c3' driver usage field missing
+Debug: 81 6 command.c:151 script_debug(): command - esp32c3 configure -event halted 
+		global _ESP_WDT_DISABLE
+	    $_ESP_WDT_DISABLE
+	    esp halted_event_handler
+	
+Debug: 82 6 command.c:151 script_debug(): command - esp32c3 configure -event examine-end 
+		# Need to enable to set 'semihosting_basedir'
+		arm semihosting enable
+		arm semihosting_resexit enable
+		if { [info exists _SEMIHOST_BASEDIR] } {
+			if { $_SEMIHOST_BASEDIR != "" } {
+				arm semihosting_basedir $_SEMIHOST_BASEDIR
+			}
+		}
+	
+Debug: 83 6 command.c:151 script_debug(): command - esp32c3 configure -event reset-assert-post 
+		global _ESP_SOC_RESET
+		$_ESP_SOC_RESET
+	
+Debug: 84 6 command.c:151 script_debug(): command - esp32c3 configure -event gdb-attach 
+		if { $_ESP_SMP_BREAK != 0 } {
+			$_TARGETNAME_0 xtensa smpbreak BreakIn BreakOut
+		}
+		# necessary to auto-probe flash bank when GDB is connected and generate proper memory map
+		halt 1000
+		if { [$_ESP_MEMPROT_IS_ENABLED] } {
+			# 'reset halt' to disable memory protection and allow flasher to work correctly
+			echo "Memory protection is enabled. Reset target to disable it..."
+			reset halt
+		}
+
+		if { $_ESP_ARCH == "riscv" } {
+			# by default mask interrupts while stepping
+			riscv set_maskisr steponly
+		}
+	
+Debug: 85 6 command.c:151 script_debug(): command - esp32c3 configure -event gdb-detach 
+		$_TARGETNAME_0 esp gdb_detach_handler
+	
+Debug: 86 6 command.c:151 script_debug(): command - riscv set_reset_timeout_sec 2
+Debug: 87 6 command.c:151 script_debug(): command - riscv set_command_timeout_sec 5
+Debug: 88 6 command.c:151 script_debug(): command - riscv set_mem_access sysbus progbuf abstract
+Debug: 89 6 command.c:151 script_debug(): command - riscv set_ebreakm on
+Debug: 90 7 command.c:151 script_debug(): command - riscv set_ebreaks on
+Debug: 91 7 command.c:151 script_debug(): command - riscv set_ebreaku on
+Debug: 92 7 command.c:151 script_debug(): command - esp32c3 riscv expose_csrs 2016=mpcer
+Debug: 93 7 command.c:151 script_debug(): command - esp32c3 riscv expose_csrs 2017=mpcmr
+Debug: 94 7 command.c:151 script_debug(): command - esp32c3 riscv expose_csrs 2018=mpccr
+Debug: 95 7 command.c:151 script_debug(): command - esp32c3 riscv expose_csrs 2051=cpu_gpio_oen
+Debug: 96 7 command.c:151 script_debug(): command - esp32c3 riscv expose_csrs 2052=cpu_gpio_in
+Debug: 97 7 command.c:151 script_debug(): command - esp32c3 riscv expose_csrs 2053=cpu_gpio_out
+Info : 98 7 server.c:298 add_service(): Listening on port 6666 for tcl connections
+Info : 99 7 server.c:298 add_service(): Listening on port 4444 for telnet connections
+Debug: 100 7 command.c:151 script_debug(): command - init
+Debug: 101 7 command.c:151 script_debug(): command - target init
+Debug: 102 7 command.c:151 script_debug(): command - target names
+Debug: 103 7 command.c:151 script_debug(): command - esp32c3 cget -event gdb-flash-erase-start
+Debug: 104 7 command.c:151 script_debug(): command - esp32c3 configure -event gdb-flash-erase-start reset init
+Debug: 105 7 command.c:151 script_debug(): command - esp32c3 cget -event gdb-flash-write-end
+Debug: 106 7 command.c:151 script_debug(): command - esp32c3 configure -event gdb-flash-write-end reset halt
+Debug: 107 7 command.c:151 script_debug(): command - esp32c3 cget -event gdb-attach
+Debug: 108 7 target.c:1624 handle_target_init_command(): Initializing targets...
+Debug: 109 7 riscv.c:413 riscv_init_target(): [esp32c3] riscv_init_target()
+Debug: 110 7 semihosting_common.c:105 semihosting_common_init():  
+Error: 111 9 esp_usb_jtag.c:646 esp_usb_jtag_init(): esp_usb_jtag: could not find or open device!
+Debug: 112 9 command.c:541 run_command(): Command 'init' failed with error code -4
+User : 113 9 command.c:612 command_run_line(): /home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/target/esp_common.cfg:9: Error: 
+at file "/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/share/openocd/scripts/target/esp_common.cfg", line 9
+Debug: 114 9 riscv.c:463 riscv_deinit_target(): [esp32c3] riscv_deinit_target()
+Debug: 115 9 target.c:2166 target_free_all_working_areas_restore(): freeing all working areas

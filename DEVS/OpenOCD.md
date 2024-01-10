@@ -114,8 +114,10 @@ at file "/home/ubuntu/.espressif/tools/openocd-esp32/v0.12.0-esp32-20230921/open
 
 
 - [ ] Let's see if Windows (where our device is) needs some driver
-- [ ] Report to us, and Espressif OpenOCD Issues.
+- [x] Report to us, and Espressif OpenOCD Issues.
 
 `flat-tire-emoji..`
 
+---
 
+>Note! `probe-rs` is another way of debugging - potentially considered by IntelliJ. It doesn't need the "gdb layer" so sounds good to the author.

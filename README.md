@@ -411,6 +411,28 @@ $ openocd -f board/esp32c3-builtin.cfg
 <font color=red>tbd. What can we do from the terminal?</font>
 
 
+## Sharing work folders
+
+Above, we've created work folders only within the Multipass VM.
+
+If you for some reason want to access them also on the host, create them on the host, and map to the VM:
+
+```
+$ mkdir cow
+
+$ multipass mount cow embedded-rover:/home/ubuntu/cow
+```
+
+>Note! You cannot map to an already existing work folder within the VM. If you try this, the command will succeed but the folder will be empty. To undo, use `multipass umount`.
+
+But.. populating such a folder may be difficult, since `git clone` or `cargo generate` create a folder automatically. The author would likely:
+
+- use a temporary name for the creation
+- move all contents from the temporary name to the mapped (shared) folder
+- remove the temporary name
+
+As you can see, this is a bit tedious. There may be other ways of sharing a folder in a VM. Perhaps JetBrains Remote Development has a way for this (that goes VM -> local).
+
 
 ## Troubleshooting
 
