@@ -50,12 +50,10 @@ The intention is to support also Windows {10|11} + WSL, eventually.
 
 For communicating with the development board, you need a Windows PC (Windows 10 Home will do).
 
-<small>
-> Developed on:
+><small> Developed on:
 > 
 > - macOS 14.2
-> - Multipass 1.13.0-rc
-</small>
+> - Multipass 1.13.0</small>
 
 ## Why sandboxing?
 
