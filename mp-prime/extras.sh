@@ -28,4 +28,4 @@ curl -Ls "https://github.com/cargo-generate/cargo-generate/releases/download/v0.
 echo ". ~/.cargo/env" >> ~/.bashrc
 
 # Projects can override this. If we don't give a default, 'rustc' and 'cargo' commands don't like to start.
-rustup default nightly
+~/.cargo/bin/rustup default nightly

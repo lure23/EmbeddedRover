@@ -3,7 +3,7 @@ set -e
 
 #
 # Usage:
-#   $ ./prep.sh
+#   $ [MP_NAME=xxx] [MP_PARAMS=...] ./prep.sh
 #
 # Requires:
 #   - multipass
@@ -14,8 +14,10 @@ set -e
 #     preview). AK/5-Jan-24
 #
 
-MP_NAME=embedded-rover-1
-MP_PARAMS="--memory 6G --disk 10G --cpus 2"
+# Provide defaults
+#
+MP_NAME=${MP_NAME:-embedded-rover}
+MP_PARAMS=${MP_PARAMS:---memory 6G --disk 14G --cpus 2}
   #
   # Note: Embedded Rust remote development claims to need 8 GB of RAM, 4 cores.[1] We don't quite match those.
   #     [1]:  RustRover docs > Remote Development > System Requirements > Minimal Requirements
@@ -25,7 +27,7 @@ MP_PARAMS="--memory 6G --disk 10G --cpus 2"
 	#
 	# Disk:	3.5GB seems to be needed for Rust installation.
 	#   ESP32 toolchain needs quite a lot.
-	#   RustRover remote development: "At least 500MB of free disk space"
+	#   PLENTY for RustRover remote development
 	#		Must be in increments of 512M
 	#
 	# Hint: Use 'multipass info' on the host to observe actual usage.
@@ -46,7 +48,7 @@ MP_PARAMS="--memory 6G --disk 10G --cpus 2"
 #
 multipass launch lts --name $MP_NAME $MP_PARAMS --mount ./mp-prime:/home/ubuntu/.mp-prime
 
-multipass exec $MP_NAME -- sudo apt-get update
+multipass exec $MP_NAME -- sudo sh -c "apt update && apt -y upgrade"
 multipass exec $MP_NAME -- sh -c ". ~/.mp-prime/esp-template.sh"
 multipass exec $MP_NAME -- sh -c ". ~/.mp-prime/drivers.sh"
 multipass exec $MP_NAME -- sh -c ". ~/.mp-prime/extras.sh"
